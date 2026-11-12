@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  # 1. Nuestra aplicación web
+  app-web:
+    build: .
+    ports:
+      - "3000:3000"
+    networks:
+      - red-monitoreo
+
+  # 2. Servidor de Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - red-monitoreo
+
+  # 3. Servidor de Grafana
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      # Lo mapeamos al 3001 para que no choque con nuestra app web
+      - "3001:3000" 
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # Contraseña por defecto
+    networks:
+      - red-monitoreo
+
+networks:
+  red-monitoreo:
+    driver: bridge

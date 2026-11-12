@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 5s # Con qué frecuencia buscará nuevas métricas
+
+scrape_configs:
+  - job_name: 'api-web-nodejs'
+    static_configs:
+      # Apuntamos al contenedor de nuestra app web en el puerto 3000
+      - targets: ['app-web:3000']
